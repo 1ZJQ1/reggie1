@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import edu.czjt.reggie.common.R;
 import edu.czjt.reggie.entity.Employee;
+import edu.czjt.reggie.entity.Redis;
 import edu.czjt.reggie.service.EmployeeService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -26,6 +27,9 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
+    @Autowired
+    RedisTemplate redisTemplate;
+
 
     @PostMapping("/login")
     public R<Employee> login(HttpServletRequest request, @RequestBody Employee employee) {
@@ -33,7 +37,7 @@ public class EmployeeController {
         // 1. 将pwd使用md5加密
         String password = employee.getPassword();
         String username = employee.getUsername();
-
+        Redis r = new Redis(username,password);
         password = DigestUtils.md5DigestAsHex(password.getBytes());
 
         // 2. 根据username查询数据库
@@ -56,6 +60,7 @@ public class EmployeeController {
         }
         // 6. 登录成功，将员工ID存入Session中
         request.getSession().setAttribute("employee", emp.getId());
+        redisTemplate.opsForValue().set("user",r);
         return R.success(emp);
         // return "登录成功";
     }
