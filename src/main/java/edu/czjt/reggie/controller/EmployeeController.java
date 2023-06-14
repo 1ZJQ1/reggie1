@@ -41,6 +41,7 @@ public class EmployeeController {
         password = DigestUtils.md5DigestAsHex(password.getBytes());
 
         // 2. 根据username查询数据库
+        // 基于Lambda表达式的查询条件构造器，可以用于构造复杂的查询条件，简化了SQL语句的编写过程。
         LambdaQueryWrapper<Employee> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Employee::getUsername, employee.getUsername());
         Employee emp = employeeService.getOne(queryWrapper);

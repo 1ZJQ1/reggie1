@@ -16,16 +16,8 @@ import edu.czjt.reggie.entity.AddressBook;
 
 import org.apache.ibatis.annotations.Mapper;
 
-
-
-
-
 @Mapper
 public interface AddressBookMapper extends BaseMapper<AddressBook> {
-
-
-
-
 
 
 }
